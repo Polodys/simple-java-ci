@@ -6,4 +6,7 @@ public class CalculatorTest {
     public void testAddition() {
         assertEquals(6, Calculator.add(3, 3));
     }
+    public void testSoustraction() {
+        assertEquals(2, Calculator.substract(10, 8));
+    }
 }
