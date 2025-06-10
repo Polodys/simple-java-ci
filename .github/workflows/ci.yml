@@ -1,4 +1,4 @@
-name: Java CI
+name: Java CI with Maven
 
 on:
   push:
@@ -19,32 +19,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-    
-    - name: Compile Java files -source and test
-      run: |
-        mkdir -p bin
-        javac -cp "lib/*" -d bin $(find src tests -name "*.java")
+        cache: 'maven'
 
-    - name: Run JUnit Tests
-      run: |
-        java -cp "bin:lib/*" org.junit.runner.JUnitCore CalculatorTest
-
-        - name: Create Manifest file
-      run: |
-        echo "Main-Class: Calculator" > Manifest.txt
-
-    - name: Create executable JAR
-      run: |
-        mkdir -p dist
-        jar cfm dist/app.jar Manifest.txt -C bin . -C lib .
-        # Note: The -C lib . part assumes 'lib' contains your jar dependencies (junit, hamcrest)
-        # and that 'bin' contains your compiled classes.
-        # This command might need adjustment if your 'lib' structure is different.
-        # If 'lib' contains direct .jar files, this should work.
-        # If the jar is not found, you may need to specify individual jars with -C lib/junit-4.13.2.jar
-
-    - name: Upload JAR as artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: java-app
-        path: dist/app.jar
+    - name: Build with Maven
+      run: mvn clean install
